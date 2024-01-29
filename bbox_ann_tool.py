@@ -315,6 +315,11 @@ class DataLabelingApp:
                     x, y, w, h = bbox
                     self.canvas.create_rectangle(x, y, x+w, y+h, outline='blue')
 
+                    # Display class label above the bounding box
+                    class_label_x = (x + x + w) / 2  # Calculate the x-coordinate for class label
+                    class_label_y = y - 10  # Adjust this value based on your preference for the y-coordinate
+                    self.canvas.create_text(class_label_x, class_label_y, text=class_name, fill='blue')
+
         else:
             # Display a placeholder message if no bounding box coordinates are found
             self.bbox_text.insert(tk.END, "No existing bounding box coordinates for this image.\n")
@@ -333,34 +338,6 @@ class DataLabelingApp:
     #     else:
     #         # Display a placeholder message if no bounding box coordinates are found
     #         self.bbox_text.insert(tk.END, "No existing bounding box coordinates for this image.\n")
-
-    def save_data_dprr(self):
-        if self.image_path:
-            class_name = self.class_entry.get()
-            bbox_coords = (self.start_x, self.start_y, self.start_x + self.canvas.winfo_width(), self.start_y + self.canvas.winfo_height())
-
-            # Update data
-            self.classes.append(class_name)
-            self.bboxes.append(bbox_coords)
-
-            # Check if entry for current image already exists in output_data
-            current_image_data = next((item for item in self.output_data if item["image"] == self.image_path), None)
-
-            if current_image_data:
-                # Update existing entry
-                current_image_data["classes"] = self.classes.copy()
-                current_image_data["bboxes"] = self.bboxes.copy()
-            else:
-                # Create a new entry
-                current_image_data = {"image": self.image_path, "classes": self.classes.copy(), "bboxes": self.bboxes.copy()}
-                self.output_data.append(current_image_data)
-
-            # Save data to JSON file
-            with open("output.json", "w") as json_file:
-                json.dump(self.output_data, json_file)
-
-            # Display bounding box coordinates in the Text widget
-            self.bbox_text.insert(tk.END, f"{self.image_path}\n{bbox_coords}\n")
 
 
 if __name__ == "__main__":

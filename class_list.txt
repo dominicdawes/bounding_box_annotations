@@ -3,3 +3,7 @@ gazelle
 warthog
 hyena
 zebra
+inter
+fiorentina
+team 1
+team 2
